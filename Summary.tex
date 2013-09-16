@@ -111,14 +111,99 @@ urlcolor=black
 \clearpage
 
 
-%\ch{Chapter}
-%	\se{Section{
-%		\uli{
-%			\li lipo1
-%			\li lipo2
-%		}
-%		\stdImg{v14.9}{}
-
+\ch{.Net}
+	\se{CLR}
+		\stdImg{v1.1}{Common Language Runtime}
+		\expl{Managed Code}{Managed Code wird unter Aufsiicht des CRL ausgeführt (Security Manager, GC, ...)}
+	
+	\se{Common Type System CTS}
+		\stdImg{v1.2}{CTS}
+		\expl{Struct}{Wertobjekt, kein Ref. Type, unterschiedlich zu C!}
+		
+		\sse{Ref Types}
+			\stdImg{v1.3}{Ref Type}
+			XY.PointR entält Reflection Info.
+			
+		\sse{Value Types}
+			\stdImg{v1.4}{Value Type (nur auf dem Stack}
+			Konstruktor ist kein Konstruktor sondern nur ein Initialisierer der Werte auf dem Stack!
+			
+		\sse{Unterschiede}
+			Aufpassen. Syntax genau gleich!
+			\stdImg{v1.5}{Syntax / Hardware}
+			\stdImg{v1.7}{Unterschiede Struct und Member}
+			
+		\sse{Boxing}
+			\stdImg{v1.6}{}
+			Boxing ist eine teuere Operation und erzeugt eine menge Garbage!
+			
+		\sse{MS Intermediate Language}
+			\stdImg{v1.8}{IL}
+			\stdImg{v1.9}{}
+			\uli{
+				\li Fehlt während der Laufzeit eine Klassenmethode als Native Code, wird der JIT Compiler aufgerufen und der IL Code mit dem Native Code ersetzt.	
+				\li Typesafty kann zur Laufzeit überprüft werden in der IL
+				\li IL wird nicht ausgeführt sondern zur Laufzeit compiliert!
+			}
+			
+	\se{Assemblies}
+		\expl{Assembly}{Deployment Einheit (exe, dll) im Portable Executable Format}
+		\stdImg{v1.11}{}
+		\expl{Module .Net}{IL Code+Metadata, Tools (z.B. ILDASM)
+			\uli{
+				\li C++: dll+Headerfile
+				\li Java: Jar (Enthält Headerfileinfo werden über Reflection aus dem Jar extrahiert)
+				\li .Net: dll/exe (wie Java)	
+			}
+		}
+		\expl{Unterschied Komponente / Klasse in UML}{Komponente: Blackbox mit Interfaces}
+		\stdImg{v1.10}{.Net dll}
+		
+		\sse{Type Resolution}
+			Nicht über Filepath wie in Java sondern in den Metadata festgeschrieben.
+			\stdImg{v1.12}{Assemblies Abhängigkeiten}
+			
+	\se{Garbage Collection}
+		\uli{
+			\li Heap Algorithmus, läuft über erreichbarkeit, arbeitet mit Generationen.
+			\li Aufräumen ist langsam, allozieren schnell.
+		}
+		
+	\se{Namespaces}
+		\stdImg{v1.13}{.Net Namespaces}
+		\stdImg{v1.14}{Namespace und asso. DLL}
+		
+	\se{Classes}
+		\stdImg{v1.15}{Alles wird UpperCamelcase benannt, nur Felder sind lowerCamelCase}
+		
+	\se{Einfache Typen}
+		\stdImg{v1.16}{einfache Typen}
+		
+	\se{Referenztypen}
+		\sse{Arrays}
+			\stdImg{v1.17}{Unterschied jagged und block Array}
+			
+		\sse{Enum}
+			\stdImg{v1.18}{}
+			\stdImg{v1.19}{}
+			
+		\sse{String}
+			\uli{
+				\li Referenztyp
+				\li Nicht modifizierbar (StringBuilder bentzen)
+				\li Operatoren: +, [], Length
+				\li Wertvergleich mit == und !=
+			}
+			
+		\sse{Klassen}
+			\stdImg{v1.20}{}
+			\uli{
+				\li Virtual kennzeichnet Methoden mit dnamic binding
+				\li overwrite kennzeichnet Methodenüberschreibungen
+				\li base. ruft Basiskonstruktor auf
+			}
+			\examp{Referenziertes Objekt wird = null zugewiesen}{Das Objekt wird vom GC abgeräumt, auch wenn noch referenzen darauf zeigen.}
+		
 
 
 \end{document}
