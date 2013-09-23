@@ -163,6 +163,7 @@ urlcolor=black
 			Nicht über Filepath wie in Java sondern in den Metadata festgeschrieben.
 			\stdImg{v1.12}{Assemblies Abhängigkeiten}
 			
+\ch{C\#}
 	\se{Garbage Collection}
 		\uli{
 			\li Heap Algorithmus, läuft über erreichbarkeit, arbeitet mit Generationen.
@@ -203,7 +204,117 @@ urlcolor=black
 				\li base. ruft Basiskonstruktor auf
 			}
 			\examp{Referenziertes Objekt wird = null zugewiesen}{Das Objekt wird vom GC abgeräumt, auch wenn noch referenzen darauf zeigen.}
+			\stdImg{v1.21}{Unterschied Klasse und Structs}
+			
+		\sse{Boxing}
+			Aufpassen mit Boxing! Auto-Boxing nur für lesende Zugriffe verwenden, nie für Zuweisungen.
+		\sse{Punkt Operator}
+			Punkt Operator wird sowohl für Dereferenzierung wir für Feldzugriff verwendet. (In C++ wird der Pfeil als Dereferenzierungsoperator verwendet und der Punkt nur für Felderzugriff (Klasse, Struct).
+			
+	\se{Klassen}
+		\sse{Methoden}
+			\uli{
+				\li Mit ref deklarierte Variable muss auch wieder mit ref angesprochen werden.
+			}
+			\stdImg{v1.22}{Arten von Parametern}
 		
+		
+		\sse{Konstruktoren}
+			\stdImg{v1.23}{}
+		
+			\sse{Statische Konstruktoren}
+				\stdImg{v1.24}{Statische Konstruktoren}
+			
+		\sse{Destruktor}
+			Ist genau genommen ein finalizer und kein Destruktor. Macht den GC langsam.
+		
+		\sse{Properties}
+			\definition{Properties}{Berechnete Felder}
+			\stdImg{v1.25}{Properties}
+		
+			\sse{Automatische Konstruktoren}
+				\begin{verbatim}
+					public string Name { get; set; }
+				\end{verbatim}
+			
+		\sse{Indexer}
+			\definition{Indexer}{Index Operator}
+			\stdImg{v1.26}{}
+		
+		\sse{Vererbung}
+			Syntax wie bei C++:
+			\begin{verbatim}
+				class B:A {
+					...
+				}
+			\end{verbatim}
+
+			\expl{Statische und dynamische Typen}{
+				\\
+					A a = new A(); // statischer Typ von a ist immer A, dynamischer Typ ist hier auch A\\
+					a = new B(); // statischer Typ unverändert, dynamischer Typ ist B
+				\\
+			}
+		
+			\stdImg{v1.27}{Geprüfte Typenumwandlungen}
+		
+			\sss{Dynamic Binding}
+				\expl{Statische und dynamische Methodenaufrufe}{Beim Virtual Binding geht die Methodenauflösung über das Objekt und über dessen Klasse, beim statischen Binding direkt über den Basistyp \ra\ ruft Methode des Basistyps auf.}
+				\expl{virtual und dynamic binding}{Virtual braucht es nur dann, wenn ANSTELLE des Objektes A, ein Kindobjekt verwendet werden soll. Z.B. eine Schnittstelle, die A-Objekte oder A-Kinder erwartet. In der Realität ist der Fall sehr selten und darum bei C\# nicht standard.}
+				\examp{Dynamic Binding}{User Interface mit Window Elementen wie Buttons, Scrollpane, ... die alle von ``Window'' abgeleitet sind. Der Window Manager besitzt eine Collection mit ``Window'' Elementen, durch die er iteriert und für jedes Objekt seine eigene paint methode ``public void paint()'' aufruft. Bei Static Binding würde die paint() Methode der Window Klasse aufgerufen und nicht diejenige des übergebenen Elementes.}
+			
+				\important{new virtual verdeckt weitere Overrides von Obgeleiteten Klassen. Der Compiler geht von oben nach unten in der Klassenhirarchie. new virtual unterbricht diese Hirarchie.}
+				\stdImg{v1.29}{DB mit Verdecken}
+			
+			\sss{Ober- und Unterklassen Konstruktoren}
+				Statische Elemente vor Dynamischen! Statische Felder vor Instanzfelder!
+				\stdImg{v1.30}{}
+				\stdImg{v1.31}{}
+			
+	\se{Interfaces}
+		Methoden sind per default public, dürfen also nicht public definiert werden \ra\ Kompiler motzt sonst.
+	
+		\begin{verbatim}
+			class MyClass : MyInterface {
+		
+			}
+		\end{verbatim}
+			
+		\sse{Named Clashes}
+			Mehrere Interfaces mit gleicher Methode \ra\ angeben welche man implemtentiert (optional).
+			\stdImg{v1.32}{Named Clashes}
+			
+	\se{Optionale Parameter}
+		\stdImg{v1.33}{Optionale Parameter}
+		Ist der optionale Parameter nicht der hinterste, kann man durch naming diesen angeben:
+		\begin{verbatim}
+			function(int a, int b, aut = 5, int from, int aso, int to = 100) {
+				...s
+			}
+		
+			function(a, b, from: 100, to: 200);
+		\end{verbatim}
+
+	\se{Partial Methods}
+		Hooks
+		\stdImg{v1.34}{}
+		Nur verwenden für Code Generatoren!
+
+	\se{Delegates}
+		\definition{Delegate}{Methodentyp. Methode als Variable übergeben wie im JS. Methode wird anschliessend aufgerufen.}
+		\stdImg{v1.35}{Delegate}
+		
+	\se{Events}
+
+
+
+
+
+
+
+
+
+
 
 
 \end{document}
