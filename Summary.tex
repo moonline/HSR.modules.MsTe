@@ -14,6 +14,22 @@
 
 %quellcode
 \usepackage{listings}
+\lstset{
+  language=C,              % choose the language of the code
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers.        
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{lightgray},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+}
+\lstdefinestyle{sharpc}{language=[Sharp]C, frame=lrtb, rulecolor=\color{gray!80!gray}}
 
 %tabellen
 \usepackage{tabularx}
@@ -105,6 +121,7 @@ urlcolor=black
 
 \usepackage{graphicx}
 \begin{document}
+\lstset{style=sharpc}
 
 % Inhaltsverzeichnis
 \tableofcontents
@@ -304,16 +321,58 @@ urlcolor=black
 		\definition{Delegate}{Methodentyp. Methode als Variable übergeben wie im JS. Methode wird anschliessend aufgerufen.}
 		\stdImg{v1.35}{Delegate}
 		
+		\expl{Anonyme Interfaces}{.Net kennt keine Anonymen Interfaces wie Java.}
+		
+		\begin{lstlisting}
+			delegate bool check(Payment p);			
+			public function ammount(int ammount, check) {
+				...
+			}
+			
+			ammount(1500, function(Payment p) { 
+				return p.Ammount > 0; 
+			}
+		\end{lstlisting}
+		
+		\stdImg{v1.48}{In C\# gibt es nur Multicast Delegates!}
+		
+		\important{Delegates sind wie Strings unveränderbar! + und - Operationen auf Delegates adden und entfernen nicht wie erwartet sondern rufen combine auf. Combine fügt der Bestehenden Kette ein neues Element hinzu indem damit ein neues Delegate erstellt wird, das dem alten zugewiesen wird.}
+		\stdImg{v1.49}{}
+		
 	\se{Events}
+		Delegates als Observer. Umsetzung von Callbacks.
+		
+		\stdImg{v1.36}{Events}
+		\exam{Event kommt eine Aufgabe an Prüfung}
+		\stdImg{v1.37}{Examp: Client}
+		\stdImg{v1.38}{Examp 2}
+		\stdImg{v1.39}{.Net Event Handlers}	
+		
+		\lstinputlisting{code/Counter.cs}
+		\lstinputlisting{code/CounterClient.cs}
+		
+		\sse{Erweiterungen}
+			\stdImg{v1.40}{Automatische ergänzung von new Class {} durch den Compiler (rot)}
+			\stdImg{v1.41}{Anonyme Methoden}
+			\stdImg{v1.42}{Nicht benutzte Parameter des Delegate können weggelassen werden.}
+	
+	\se{Closures}
+		Benutzte lokale Variablen werden in ein Objekt gepackt, damit sie für den Delegate noch verfügbar sind. (Call by Reference)
+		\stdImg{v1.43}{Closures}
 
-
-
-
-
-
-
-
-
+	\se{Generics}
+		\sse{Delegate Generics}
+			\stdImg{v1.44}{Delegate Generic}
+			
+	\se{Exceptions}
+		Fast Identisch wie in Java
+		\stdImg{v1.45}{Try - Catch}
+		Finally wird immer durchlaufen.
+		\stdImg{v1.46}{System.Exception}
+		\stdImg{v1.47}{Exception Hirarchie}
+		
+	
+		
 
 
 

@@ -90,11 +90,25 @@ Wie geben sie optionale Parameter an? Was sind "named parameters"?
 Was sind "partial methods"? Wozu werden sie gebraucht? Sollten Sie sie einsetzen?
 
 **1.0.27.**
-Was sind "delegates"? Machen Sie ein Beispeil mit einem "delegate" Wert. Was sind "multicast delegates"?
+Was sind "delegates"? Machen Sie ein Beispeil mit einem "delegate". Was sind "multicast delegates"?
 
 **1.0.28.**
 Wie nutzen Sie delegates als Callback? Machen Sie ein Beispiel.
 
+**1.0.29.**
+Was sind Events? Machen Sie ein Beispiel, wie mit Events die Anzeige einer Uhr einfach aktualisiert werden kann.
+
+**1.0.30.**
+Welche Vorteile bietet das Arbeiten mit Delegates und Events anstelle Interfaces?
+
+**1.0.31.**
+Wie kann die Erzeugung eines Delegate vereinfacht geschrieben werden? Was sind generische Delegates?
+
+**1.0.32.**
+Was sind anonyme Methoden? Wozu können sie verwendet werden?
+
+**1.0.33.**
+Wie werden Exceptions in der Rufkette weitergegeben, wenn sich ein Delegate Call in der Kette befindet? Machen Sie eine Skizze.
 
 
 .NET
