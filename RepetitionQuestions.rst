@@ -111,5 +111,79 @@ Was sind anonyme Methoden? Wozu können sie verwendet werden?
 Wie werden Exceptions in der Rufkette weitergegeben, wenn sich ein Delegate Call in der Kette befindet? Machen Sie eine Skizze.
 
 
+Generics
+========
+
+Generische Klassen
+------------------
+**2.1.1.**
+Wie lautet die Syntax für eine generische Klasse? Wie sieht es aus mit mehreren Platzhaltern? Machen Sie je auch ein Beispiel zur Verwendung.
+
+**2.1.2.**
+Welche Operationen finden zur Compilezeit und welche zur Laufzeit statt bei C\# Generics? Wie funktioniert dies bei Java? Erklären Sie anhand dieser Gegebenheit auch, warum bei Java keine Basistypen für Generics verwendet werden können?
+
+**2.1.3.**
+Was sind Constructor Constraints? Wie werden sie definiert? Können sie auch Platzhalter verwenden?
+
+**2.1.4.**
+Von welchen Klassen darf eine generische Klasse erben?
+
+**2.1.5.**
+Welche Zuweisungen bei generischen Klassen sind kompatibel, und welche nicht?
+
+**2.1.6.**
+Können generische Methoden überschrieben werden? In welchem Fall können Platzhalter verwendet werden?
+
+**2.1.7.**
+Wozu dient default(t)?
+
+**2.1.8.**
+Erklären Sie Nullable.
+
+
+Generische Methoden
+-------------------
+**2.2.1.**
+Wie generalisieren Sie Methoden? Machen Sie auch ein Beispiel zur Benutzung.
+
+
+Generische Delegates und Lambda Expressions
+-------------------------------------------
+**2.2.3.**
+Wie generalisieren Sie delegates?
+
+**2.2.4.**
+Was sind Lambda Expressions? Wie wenden Sie sie an? Machen Sie ein Beispiel wie sie mit Lambda Expressions Delegates umsetzen. Schreiben Sie die Lambda Expression in allen Darstellungsmöglichkeiten.
+
+**2.2.5.**
+Wozu dient der vrdefinierte Delegate Func?
+
+
+Generische Collections
+----------------------
+**2.3.1.**
+Nennen Sie einige generische Collections und Interfaces.
+
+**2.3.2.**
+Machen Sie ein Beispiel, wie Sie eine List<int> anlegen, befüllen, Elemente löschen und sortieren.
+
+
+Iteratoren
+----------
+**2.4.1.**
+Schreiben Sie einen Iterator für eine eigene Collection indem sie eine interne IEnumarator Klasse verwenden. Machen Sie auch ein Beispiel zur Verwendung.
+
+**2.4.2.**
+Was wird mit yield bezweckt? Wie schreiben Sie damit eine vereinfachte Implementation eines Iterators? Was passiert unter der Oberfläche bei der Verwendung?
+
+**2.4.3.**
+Wie schreiben Sie spezifische Iteratoren (z.B. einen Range Iterator)?
+
+
+
+
+
+
+
 .NET
 ====

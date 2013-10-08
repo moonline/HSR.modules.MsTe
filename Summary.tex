@@ -372,7 +372,55 @@ urlcolor=black
 		\stdImg{v1.47}{Exception Hirarchie}
 		
 	
+\ch{Generics}
+	\se{Generische Typen}
+		\sse{Platzhalter}
+			Spezifische Typen werden zur Laufzeit zu spezifischen Klassen kompiliert. Für Referenztypen wird immer eine konkrete Klasse vom Typ Object verwendet, bei basistypen für jeden Type eine einzelne, die bei der ersten Verwendung kompiliert wird.
+			\stdImg{v2.1}{Platzhalter}
+			Auch Basistypen können für Generics verwendet werden.
+			\stdImg{v2.2}{Mehrere Platzhalter}
+	
+		\sse{Constraints}
+			\stdImg{v2.6}{Constraints}
+			\stdImg{v2.3}{Einschränken des Platzhaltertypen}
+			\stdImg{v2.4}{Multiple Constraints}
+			\stdImg{v2.5}{Parent und Konstruktor Constraints}
+			Platzhalter können auch für Constraints verwendet werden.
+			\stdImg{v2.7}{Platzhalter Constraints}
+			\stdImg{v2.14}{Methoden Constraints}
+			
+		\sse{Inheritance}
+			\stdImg{v2.8}{}
+			\stdImg{v2.9}{Kompatibilität von Zuweisungen}
+			\stdImg{v2.10}{Überschreiben von Generic Methoden}
+
+		\sse{Null-Initialisierung}
+			\stdImg{v2.11}{Nullwerte}
+			\stdImg{v2.12}{Nullable (Null für Werttypen)}
+			\stdImg{v2.13}{Nullable Kurzform}
+
+	\se{Delegates und Lambda}
+		\stdImg{v2.16}{}
+		\stdImg{v2.15}{Lambda Expression}
+		\stdImg{v2.17}{}
 		
+		\sse{Func}
+		\stdImg{v2.18}{Vordefinierte generische Delegates zur Verwendung}
+
+	\se{Collections}
+		\stdImg{v2.19}{System.Collections.Generic}
+		\stdImg{v2.20}{Nicht generic Pendants}
+		
+	\se{Iteratoren}
+		\stdImg{v2.26}{Iteratoren von Hand}
+		\stdImg{v2.21}{generische Iteratoren}
+		\stdImg{v2.22}{Vereinfachte Implementation mit yield}
+		Yield springt jeweils wieder aus der Funktion raus und fügt den Code in die aufrufende foreach Funktion ein.
+		\stdImg{v2.23}{Was passiert hinter den Kulissen?}
+		\stdImg{v2.24}{Yield}
+		\stdImg{v2.25}{Example}
+
+
 
 
 
