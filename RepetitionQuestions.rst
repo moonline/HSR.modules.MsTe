@@ -180,6 +180,82 @@ Was wird mit yield bezweckt? Wie schreiben Sie damit eine vereinfachte Implement
 Wie schreiben Sie spezifische Iteratoren (z.B. einen Range Iterator)?
 
 
+Linq
+====
+**3.0.1.**
+Was ist Linq? Was sind Linq to Objects, Linq to XML und Linq to SQL?
+
+Extension Methods
+-----------------
+**3.1.1.**
+Was sind Extension Methods? Welches Problem lösen Sie?
+
+**3.1.2.**
+Werden extension Method zur Compilezeit oder zur Laufzeit aufgelöst?
+
+**3.1.3.**
+Welche Bedingungen müssen die Klasse und die Methodensignatur einer Extension Method erfüllen? Wie übergeben Sie Extension Methods das Objekt, auf dem die Methode aufgerufen wird? Machen Sie ein Beispiel.
+
+**3.1.4.**
+Welchen Vorteil bieten vordefinierte Extension Methods wie "where"?
+
+Anonymous Type
+--------------
+**3.2.1.**
+Was ist Compile Time Type Inference? Wie funktioniert es?
+
+**3.2.2.**
+Wie definieren Sie einen anonymen Typ (anonymes Objekt)? Konnen Anonyme Objekte weitere Anonyme Objekte enthalten? Welche Methoden enthalten anonyme Typen?
+
+**3.2.3.**
+Wie wird bei anonymen die Typensicherheit gewährleistet?
+
+**3.2.4.**
+Kann ein anonymes Objekt den Scope der aktuelle Methode verlassen?
+
+**3.2.5.**
+Welche Lese- und Schreiboperationen können auf anonymen Typen durchgeführt werden?
+
+Query Expressions
+-----------------
+**3.3.1.**
+Was sind "Query Expressions"? Wären Linq Abfragen ohne "Query Expressions" unmöglich?
+
+**3.3.2.**
+Wandeln sie die folgende Expression in Methodenschreibweise um:
+
+.. code-block:: C#
+
+	var result =
+		from c in customers
+		where c.City == "Vienna"
+		orderby c.Name
+		select new {c.Name, c.Phone};
+
+**3.3.3.**
+Wandeln Sie die folgende Schreibweise in eine Expression um:
+
+.. code-block:: C#
+
+	var result =
+		cars
+		.Where( c => c.Type.StartsWith('L'))
+		.OrderBy( c=> c.Name )
+		.Select( c => c.Type.ToUpper() );
+
+**3.3.4.**
+Was sind "Range Variables"? Wie werden Sie in der "Query Expression" geschrieben?
+
+**3.3.5.**
+Wie funktionieren "Grouping" und "Joining"? Machen Sie je ein Beispiel.
+
+**3.3.6.**
+Was ist "Select Many"? Machen Sie ein Beispiel.
+
+**3.3.7.**
+Wozu dient die "let" Klausel?
+
+
 
 
 

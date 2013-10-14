@@ -415,13 +415,87 @@ urlcolor=black
 		\stdImg{v2.26}{Iteratoren von Hand}
 		\stdImg{v2.21}{generische Iteratoren}
 		\stdImg{v2.22}{Vereinfachte Implementation mit yield}
-		Yield springt jeweils wieder aus der Funktion raus und fügt den Code in die aufrufende foreach Funktion ein.
+		\uli{
+			\li Yield springt jeweils wieder aus der Funktion raus und fügt den Code in die aufrufende foreach Funktion ein.
+			\li Yield gibt einen IEnummerator.Current zurück und fährt weiter, sobald MoveNext aufgerufen wird.
+			\li Könnte auch simuliert werden mit einem übergebenen Delegate, das anstelle dem ``yield return'' aufgerufen wird.
+		}
+		\exam{Zur Vorbereitung: mit dem Debugger durch ein Foreach/Yield Konstrukt durchsteppen}
 		\stdImg{v2.23}{Was passiert hinter den Kulissen?}
 		\stdImg{v2.24}{Yield}
 		\stdImg{v2.25}{Example}
 
+\ch{Linq}
+	\uli{
+		\li Linq kann alles abfragen, was IEnummerable<T> implementiert.
+		\li Linq ist eine reine Compilertechnologie
+	}
+	\stdImg{v3.4}{}
+	Typensichere Abfragesprache für Objekte, Listen, ...
+	\stdImg{v3.1}{Linq to Object}
+	\stdImg{v3.2}{Linq to SQL}
+	\stdImg{v3.3}{Linq to XML}
+	
+	\se{Erweiterungsmethoden}
+		\uli{
+			\li Bestehende Klassen um Methoden erweitern mit einer Statischen Klasse mit statischen Methoden durch die Angabe von ``this OriginalClass''.
+			\li Reine Compilerfunktion. Der Compiler löst die Methode auf und schreibt ``ExtendOriginalClass.function()''
+		}
+		\stdImg{v3.5}{}
+		\stdImg{v3.6}{Example}
+		
+		\sse{Predeclared Extension Methods}
+			\stdImg{v3.7}{}
+			\stdImg{v3.8}{Overrite Linq Extension Method}
+			
+		\sse{Object Initializers}
+			\stdImg{v3.9}{}
+			
+		\sse{Anonyme Typen}
+			Typensichere anonyme Typen, die zur Laufzeit generiert werden.
+			\stdImg{v3.10}{}
+			\stdImg{v3.10}{Anonyme Typen aus Eigenschaften von Anonymen Typen bauen}
+			\stdImg{v3.11}{Anonyme Typen aus Anonymen Typen bauen}
+			\stdImg{v3.12}{Anonymous Type Details}
+			\stdImg{v3.13}{Type Inference}
+			
+		\sse{Query Expression}
+			\stdImg{v3.22}{}
+			\stdImg{v3.14}{Umwandlung in Erweiterungssyntax}
+			\uli{
+				\li Compiler wandelt Query Expression um in Erweiterungssyntax
+				\li 
+			}
+			\stdImg{v3.15}{Query Syntax}
+			
+			\sss{Grouping}
+				\stdImg{v3.16}{Group into}
 
+			\sss{Joining Lists}
+				\stdImg{v3.17}{Join Lists}
+				
+			\sse{Select Many}
+				Mehrstufingen Aufsplittprozess
+				\stdImg{v3.18}{String split}
+				
+			\sss{Group Joins}
+				Liste mit Sublisten ausgeben (Strukturierte Daten).
+				\stdImg{v3.19}{Strukturierte Collection}
+				\stdImg{v3.20}{Left Outer Join (wenn keine Daten zum Namen vorhanden wird null eingefügt)}
+				
+		\sse{System.Linq Extension Methods}
+			\stdImg{v3.21}{}
 
-
+		\sse{Partial Methods (Hooks)}
+			Könnte auch mit Delegates und Interfaces umgesetzt werden. Vereinfacht nur die Schreibweise.
+			\stdImg{v3.23}{}
+			\stdImg{v3.24}{}
+			\stdImg{v3.25}{Example}
+			
+			
+			
+			
+			
+			
 
 \end{document}
