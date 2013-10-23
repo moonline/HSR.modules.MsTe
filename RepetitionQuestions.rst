@@ -256,10 +256,43 @@ Was ist "Select Many"? Machen Sie ein Beispiel.
 Wozu dient die "let" Klausel?
 
 
+.Net Entity Framework
+=====================
+**4.0.1.**
+Erklären Sie das Grundkonzept des .NET EF's.
+
+**4.0.2.**
+Erklären Sie folgende Begriffe in Bezug auf das EF: Entity Data Model, Logical Model, Conceptual Model, Mapping Layer.
+
+**4.0.3.**
+Welche Aufgabe übernimmt der Mapping Layer?
+
+**4.0.4.**
+Erklären Sie "Database First", "Model First" und "Code First".
+
+**4.0.5.**
+Inheritance: Beschreiben Sie wie "Table per Hierarchy", "Table per Type" und "Table per concrete Type" funktionieren.
+
+**4.0.6.**
+Was ist "Entity Splitting"?
+
+**4.0.7.**
+Was ist der "Object Context" und wie funktioniert er? Wie ist die Context API aufgebaut?
+
+**4.0.8.**
+Wie kann Linq zur Abfrage über das EF eingesetzt werden? Machen Sie ein Beispiel.
+
+**4.0.9.**
+Was sind "Navigation Properties" und was macht das Framework im Hintergrund für Operationen um die Daten zusammenzubekommen? Zeigen Sie dies am Beispiel einer SQL Datenbank.
+
+**4.0.10.**
+Wie funktionieren Lazy und Eager Loading? Wie wir die Ladetiefe definiert? Machen Sie ein Beispiel.
+
+**4.0.11.**
+Was passiert im Hintergrund bei implizitem Landen (Nachladen von Lazy Loading Properties/Relations)?
 
 
+CUD Operationen
+---------------
 
 
-
-.NET
-====
