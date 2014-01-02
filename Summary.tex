@@ -511,7 +511,280 @@ urlcolor=black
 			
 		
 	\se{CUD Operationen}
+		\stdImg{v4.9}{Create}
+		\stdImg{v4.10}{Update}
+		\stdImg{v4.11}{Delete}
 		
+		Context startet für jedes Objekt einen Change Tracker um mit saveChanges die Änderungen zurückschreiben zu können. ChangeTracker kennt immer original und current Wert. Damit können Änderungen rückgängig gemacht werden.
+		\stdImg{v4.12}{Change Tracker Entity States}
+	
+	\se{Patterns}
+		\sse{DB COntext}
+			\uli{
+				\li a combination of the Identity Map Pattern, Unit-Of-Work and Repository Pattern
+				\li A DBSet<TEntity> represents the collection of all entities in the context
+			}
+			\stdImg{v4.13}{Identity Map}
+	
+			\stdImg{v4.14}{Unit Of Work Pattern}
+	
+			%\stdImg{}{Repository Pattern}
+	
+			\sss{Optimistic offline Lock}
+				OR Mapper kann Lesen und Schreiben nicht in eine Transakton fassen. Darum braucht es eine Collision überwachung: Optimistic offline Pattern.
+				\stdImg{v4.15}{Optimistic offline lock Pattern}
+	
+				\stdImg{v4.16}{verfahren für OOL}
+				
+				\important{Sobald verschachtelte Kontexte vorhanden sind, können Daten mit verschiedenen Versionen auftreten \ra\ EF kann kein Update machen. \ra\ Benutzer muss handeln.}
+	
+	\se{DB Mapping}
+		\sse{in model}
+			\stdImg{v4.17}{Annotations}
+			\stdImg{v4.18}{Mapping über Annotations}
+			Problem: Code mit DB Details verschmutzt.
+		
+		\sse{extern class}
+			\stdImg{v4.20}{Mapping functions}
+			\stdImg{v4.19}{DB Configuration ausserhalb model in externer Klasse}
+			\stdImg{v4.21}{Relation Mapping}
 			
+			
+\ch{Windows Communication Foundation WCF}
+	\se{Basics}
+	\expl{Unterschied Service Orientiert / Classic}{SO: Übertragen von ganzen Objekten und Objektlisten, eine Methoden. \\Classic: Anfrufen von Objekten, aufrufen von Methoden auf diesen, Aufrufen von save() zum Speichern.}
+
+	\stdImg{v5.1}{Local Service}
+	\stdImg{v5.2}{Remote Service}
+	\stdImg{v5.3}{Kommunikation findet immer zwischen Endpunkten und nicht den Client statt}
+	\stdImg{v5.4}{Address, Binding, Contract}
+	\stdImg{v5.5}{Metadata Exchange (WSDL)}
+	WSDL kann ein-/Ausgeschaltet werden und wird automatisch vom WCF generiert werden. Wird über einen sepparaten Endpoint ausgeliefert.
+	
+	\stdImg{v5.7}{Wer tut was?}
+
+	\se{WCF use}
+		\stdImg{v5.6}{}
+		\stdImg{v5.18}{Address}
+		\stdImg{v5.8}{Contracts}
+		\stdImg{v5.9}{Service Config}
+		\stdImg{v5.10}{Service COnfig im Code}
+		Method Overloading beim Service geht nicht \ra\ Soap unterstützt kein Overloading!
+		
+	\se{Client}
+		\uli{
+			\li Nachteile generierter Client: 
+				\uli{
+					\li WSDL unterstützt unter Umständen Sprachfeatures nicht (Bsp. Properties)	
+					\li SOAP kennt keine .Net Collections \ra\ Standard muss manuel definiert werden (z.B. SortedList) \ra\ keine Feingranulare zuteilung (Typeninfo geht verloren)
+				}
+			\li Shared Assembly: Schnittstellendefinition wird nicht über WSDL abgerufen sondern über ein Shared Assembly
+			\li Nachtiele SA: 
+				\uli{
+					\li Assembly muss sowohl bei C wie S in der exakt gleichen Version vorhanden sein!
+				}
+			\li Vorteile SA:
+				\uli{
+					\li Servcice Informationen müssen bei den Clients nicht manuell nachgeführt werden (Config)
+				}
+		}
+
+	\se{Communication Patterns}
+		\stdImg{v5.11}{}
+		
+		\sse{Syncrhon}
+			Nichts spezielles
+			
+		\sse{Asynchron}
+			IsOneWay=true
+			\stdImg{v5.12}{OneWay}
+			\stdImg{v5.13}{Callback}
+			Fehlt der Operation Contract, so können keine Messages Serialisiert werden!
+			\stdImg{v5.14}{Service Setup (Vorsicht Fehler: Interface falsch)}
+			\stdImg{v5.14}{Client INterface implementation (Vorsicht Fehler: ICalcResult statt ICalculatorResult)}
+		
+		\sse{Exception Übertragung}
+			\uli {
+				\li Service Host fängt über try-catch Exception ab und überträgt sie an den Client.
+				\li FaultException ist die einzige Exception, die vom Server auf den Client geworfen kann.
+				\li FaultException ist serialisierbar.
+				\li FaultException kann weiteres Objekt mit Infos mitgegeben werden. Diesen erbt NIE von Exception, muss aber Serialisierbar sein.
+					\stdImg{v5.16}{FaultException}
+				\li Service muss FaultContract Annotation besitzen
+				\li Client: Aufgrund des FaultContract ist die Exception bekannt \ra\ fangen. Als weiteres generische Exceptions fangen.
+					\stdImg{v5.17}{Catch Client}
+				\li Network not available wirft auch Exceptions!
+			}
+			
+		\sse{Interoperability}
+			\stdImg{v5.19}{Binding Possibilities}
+			
+			
+		\sse{DataContract}
+			\sss{Polymorphismus}
+				\stdImg{v5.20}{}
+			
+			\sss{Unkow Types}
+				Falls Entwickler .Net 1 Arraylist (untypisiert) verwendet:
+				\stdImg{v5.21}{}
+			
+			\sss{Mehrfache Referenzen (Aliase)}
+				\stdImg{v5.22}{}
+
+			\sss{Umgang mit Änderungen der ServiceReferenz}
+				\uli{
+					\li Unbekannte Properties werden ignored.
+					\li Entfernen von Properties: WCF nimmt default(T) wert. \ra\ kann mega Verwirrend sein!
+				}
+				
+				
+	\se{Service Behavior}
+		Configuration wird auf der Implementation (Client) und nicht auf dem Service Interface gesetzt.
+		
+		
+		
+\ch{WPF}
+	\stdImg{v6.1}{WPF Architecture}
+	
+	\se{Visual Tree \& Logical Tree}
+		\stdImg{v6.2}{Visual Tree und Logical Tree}
+		Dependency Property erben Darstellung von Parent.
+		
+		\stdImg{v6.3}{Auflödung von Elementproperties}
+		\stdImg{v6.4}{}
+		
+	\se{Routed Events}
+		Elemente ohne Eventhandler bubbeln die Events hoch in der Hierarchie. \\
+		\examp{Beispiel Click auf einen Buttons ohne Eventhandler}{
+			\uli{
+				\li Sender: Stackpanel
+				\li Source: Button
+				\li Originalsource: Polyline im Button
+			}
+		}
+	
+		\expl{RoutingStrategy}{
+			\uli{
+				\li Tunneling raises the routed event at the root then to each
+	element toward the source element
+				\li Bubbling raises the routed event at the source element then to
+	each element toward the root
+				\li Direct raises the routed event at the source element only
+			}
+		}
+	
+		\stdImg{v6.5}{Routing Strategie}
+		
+	\se{Data Binding}
+		Binding Fehler werden erst zur Laufzeit sichtbar, werfen jedoch keinen Fehler!
+		\stdImg{v6.6}{Data Binding}
+		\uli{
+			\li Binding wird über DataContext gemacht.	
+			\li INotifyPropertyChanged führt dazu, das das UI das Objekt im Datakontext und das UI aktualisiert.
+			\li Klassen müssen INotifyPropertyChanged Events werfen, damit aktualisiert werden kann.
+		}
+		\stdImg{v6.7}{Binding}
+		\stdImg{v6.8}{Data Converters}	
+		\stdImg{v6.9}{Choose Data Template}
+		
+		\sse{Collection binding}
+			\stdImg{v6.10}{Über Binding Data Template}
+			\stdImg{v6.11}{Master Detail}
+			
+		\sse{Zusammenfassung}
+			\uli{
+				\li Data Binding Infrastructure
+				\uli{
+					\li Source: DP, Property with INotifyPropertyChanged
+					\li Target: DP
+					\li OneWay/Two Way
+				}
+				\li Data Context
+				\li Data Template
+				\li Value Converters
+				\li Binding to Collections
+			}
+			
+			
+		\sse{Patterns}
+			\stdImg{v6.12}{UI Command Pattern}
+			\stdImg{v6.13}{MVP Pattern}
+			
+			\stdImg{v6.14}{MVP Pattern}
+			\stdImg{v6.15}{MVVM Pattern}
+		
+			View Model enthält stati und Daten für die View (gehören nicht ins Datenmodel)
+	
+			\stdImg{v6.16}{ViewModel}
+	
+		\sse{Message Bus}
+			\stdImg{v6.17}{Message Bus}
+			
+			
+\ch{Threads, Tasks und asynchrone Programmierung}			
+	\se{Parallel Loops}
+		\stdImg{v7.1}{Parallel execution}
+		
+	\se{LINQ}
+		\stdImg{v7.2}{AsParallel}
+		
+	\se{Tasks}
+		\uli{
+			\li Alle statischen .Net Methoden sind Thread Save
+			\li Collections sind nicht Thread save Collections \ra\ ThreadsaveCollections	
+			\li Work Stealing: Hat ein Worker nichts mehr zu tun und in der globalen Queue ist auch nichts, so klaut er Tasks von andern Threads zu hinterst aus deren Queue
+				\stdImg{v7.3}{}
+			\li Es gibt Background Threads und Foreground Threads. \ra\ Aufpassen wenn Thread Pool runtergefahren wird.
+			\li 
+				\stdImg{v7.4}{} 
+				\uli{
+					\li Task.Run(): Fire and forget
+					\li Task.Wait(): Warten auf Beendigung
+					\li var res = Task.Result(): Warten bis Beendet und Resultat da
+						\stdImg{v7.5}{}
+					\li Exception wird im Task drin gespeichert und bei Wait oder Result zurückgegeben, damit sie an einer Stelle abgefangen werden kann. \ra\ aggregateException (enthält je nach dem Mehrere)
+						\stdImg{v7.6}{}
+				}
+		}
+		
+	\se{Async}
+		\uli{
+			\li Future: Regelmässig nachfragen ob Result da
+			\li Callback: Funktionsaufruf bei Beendigung
+		}
+		
+		\sse{Continuation}
+			\stdImg{v7.7}{Continuation statt Callbacks}
+			\stdImg{v7.8}{Continue with ruft andern Code auf (indirekter Callback)}
+			
+			
+		\sse{async vs sync}
+			\stdImg{v7.9}{}
+			
+		\sse{Async / Await}
+			\stdImg{v7.10}{}
+			
+			async methode: Compile generiert im Hintergrund einen Awaiter
+			
+			
+	\se{UI Tasks}
+		\stdImg{v7.11}{}
+		\stdImg{v7.12}{}
+		\stdImg{v7.13}{}
+		\stdImg{v7.14}{}
+		
+	\se{Async Cancelation}
+		\stdImg{v7.15}{}
+			
+			
+\ch{Reflection}
+	\stdImg{v8.1}{Get Type}	
+	\stdImg{v8.2}{Type}
+	\stdImg{v8.3}{System.Type}
+	\stdImg{v8.4}{Reflection Object Model}
+	\stdImg{v8.5}{FieldInfo}
+			
+			
+		
 
 \end{document}
