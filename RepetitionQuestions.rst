@@ -66,7 +66,7 @@ Was sind statische Konstruktoren?
 In welchem Fall benötigen sie "virtual" bei Methoden? Machen Sie in konkretes Beispiel mit der paint() Methode eines GUI's.
 
 **1.0.19.**
-Was passiert, wenn sie eine Methode mit override überschreiben, ohne das diese in der Basisklase ``virtual'' ist?
+Was passiert, wenn sie eine Methode mit override überschreiben, ohne das diese in der Basisklase "virtual" ist?
 
 **1.0.20.**
 Was ist die Sichtbarkeit "ìnternal"?
@@ -78,7 +78,7 @@ In welcher Reihenfolge werden Objekte initialisiert, wenn sie Baisklassen mit Ki
 Warum benötigen abstrakte Methoden kein "virtual"?
 
 **1.0.23**
-Was sind ``sealed'' Klassen?
+Was sind "sealed" Klassen?
 
 **1.0.24.**
 Sie implementieren mehrere Interfaces. In den Interfaces gibt es gleich benannte Methoden. Wie spezifizieren Sie, welche Methode sie konkret implementieren?
