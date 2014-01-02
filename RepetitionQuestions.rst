@@ -2,6 +2,10 @@
 HS13 MsTe Repetitionsfragen
 ===========================
 
+Antworten zu den Repetitionsfragen
+==================================
+Falls vorhanden befinden sich diese im GitHub Repository. Ergänzungen oder ganze Antwortensets sind jederzeit herzlich willkommen.
+https://github.com/moonline/HSR.modules.MsTe
 
 
 C# Grundlagen

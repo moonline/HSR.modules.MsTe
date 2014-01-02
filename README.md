@@ -1,4 +1,4 @@
 HSR.modules.MsTe
 ================
 
-Summary, repetitionquestions and answers to the MsTe module.
+Summary, repetition questions and answers to the MsTe module.
