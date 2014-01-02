@@ -7,21 +7,21 @@ Repetitionsfragen: https://github.com/moonline/HSR.modules.MsTe/blob/master/Repe
 
 
 C# Grundlagen
-=======================
+=============
 
-1 CLR
------
+**1.0.1 CLR**
+
 Das CLR ist die Laufzeitumgebung für von C# und beinhaltet nebst Classloader und JITC grundlegende Funktionsbausteine wie Code Manager, Thread Support, Garbage Collector, Security Engine oder Type Checker. Weitere Elemente sind Marshaller, Exception Manager, Debug Engine und die Base Class Library.
 
 
-2 Managed Code
---------------
+**1.0.2 Managed Code**
+
 Managed Code wird über das CLR ausgeführt und entsprechend von diesem Verwaltet (GC, Security, ...).
 Um Code "legacy Code" auszuführen, muss dieser direkt, ohne Unterstützung ausgeführt werden. Da "managed Code" das CLR voraussetzt, kann er nicht mit "legacy Code" gemischt werden.
 
 
-3 CTS
------
+**1.0.3 CTS**
+
 Das Common Type System definiert die Basistypen von C#. Es gibt "value types", "reference types" und "user defined types" (u).
 
 * value types
@@ -38,8 +38,8 @@ Das Common Type System definiert die Basistypen von C#. Es gibt "value types", "
 * Referenztypen verweisen immer auf die Speicherstelle (Heap), an der das eigentliche Objekt liegt. Mehrfache Referenzierung durch mehrfache Zuweisung an unterschiedliche Variablen ist möglich.
 	
 	
-4 MS IL
--------
+**1.0.4 MS IL**
+
 Dient zur plattformunabhängigen Ausführung. Code mehrerer Sprachen (C#, Visual Basic, ...) wird nach MS IL compiliert. Auf der Zielplattform wird der Code "Just In Time" compiliert und ausgeführt. Die Zielplattform braucht keinen compiler für den Programmiersprachspezifischen Code.
 
 **Vorteile:**
@@ -55,8 +55,7 @@ Dient zur plattformunabhängigen Ausführung. Code mehrerer Sprachen (C#, Visual
 * IL Code kann nicht direkt aufgeführt werden
 
 
-5 Kompilation und Ausführung Cross-Plattform
---------------------------------------------
+**1.0.5 Kompilation und Ausführung Cross-Plattform**
 
 * Plattform 1 (Bsp. Windows):
 	* C# Code wird nach IL+Metadata kompiliert
@@ -64,57 +63,56 @@ Dient zur plattformunabhängigen Ausführung. Code mehrerer Sprachen (C#, Visual
 	* IL Code wird verifiziert
 	* IL Code wird JIT kompiliert zu nativem Code (beim 1. Aufruf) und ausgeführt
 
-6 JITC
-------
-1. Class Loader findet Klasse nicht
-2. JITC verifiziert und kompiliert Klasse (IL -> native Code)
-3. Class-Code wird ausgeführt
+**1.0.6 JITC**
+
+1) Class Loader findet Klasse nicht
+2) JITC verifiziert und kompiliert Klasse (IL -> native Code)
+3) Class-Code wird ausgeführt
 
 
-7 Assembly, Modul
------------------
+**1.0.7 Assembly, Modul**
+
 Assembly
 	Ausführbare Deployment Einheit, dynamisch ladbar, selbstbeschreibend, versionierbar (dll, exe)	
 Modul
 	Subelement von Assembly, enthält im Unterschied dazu kein Manifest
 
 
-8 Class localization
---------------------
+**1.0.8 Class localization**
+
 i) Java: über Filepath
 ii) C++: anhand der Referenz im Headerfile
 iii) C#: anhand Referenz im Manifest
 
 
-9 Memory Management
--------------------
+**1.0.9 Memory Management**
+
 * GC funktioniert über Erreichbarkeitsgraphen und Generationen (aufräumen langsam, allozieren schnell).
 * Wird einem Objekt null zugewiesen, so wird es abgeräumt, auch wenn noch Referenzen darauf zeigen
 
 
-10
---
+**1.0.10**
 
 
 
-11 Properties & Indexer
------------------------
+**1.0.11 Properties & Indexer**
+
 Property
 	Getter/Setter für Member (werden gross geschrieben)
 Indexer
 	Definieren Index-Zugriff für Objekte
 	
 	
-12 Paketierung
---------------
+**1.0.12 Paketierung**
+
 Klassen werden im Unterschied zu Java nicht über den Filepath sondern Namespaces gruppiert. 
 
 * (+) Die Paketierung ist somit losgelöst vom Dateisystem.
 * (-) Elemente eines Namespaces können über die ganze Applikation verstreut werden
 
 
-13 Arrays
----------
+**1.0.13 Arrays**
+
 Blockarray
 	Mehrdimensionales Array mit gleichen Arraylängen in jeder Dimension, sehr effizient
 	
@@ -144,13 +142,13 @@ Jagged-Array
 		bool g = l[1][1]
 		
 		
-14 Structs
-----------
+**1.0.14 Structs**
+
 Structs sind Datenstrukturen (Valuetype), die direkt auf dem Stack abgelegt werden und initialisiert werden. Structs besitzen keine Konstruktoren und werden bei Zuweisung kopiert.str
 
 
-15 Statische Klassen
---------------------
+**1.0.15 Statische Klassen**
+
 Enthalten nur statische Methoden.
 
 
