@@ -91,7 +91,7 @@ Sie implementieren mehrere Interfaces. In den Interfaces gibt es gleich benannte
 Wie geben sie optionale Parameter an? Was sind "named parameters"?
 
 **1.0.26.**
-Was sind "partial methods"? Wozu werden sie gebraucht? Sollten Sie sie einsetzen?
+Was sind "partial classes" / methods? Wozu werden sie gebraucht? Sollten Sie sie einsetzen?
 
 **1.0.27.**
 Was sind "delegates"? Machen Sie ein Beispeil mit einem "delegate". Was sind "multicast delegates"?
