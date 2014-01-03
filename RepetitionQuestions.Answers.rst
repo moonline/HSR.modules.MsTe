@@ -6,8 +6,8 @@ Dieses Dokument wird vorzu erweitert. Ergänzungen und Antworten sind herzlich w
 Repetitionsfragen: https://github.com/moonline/HSR.modules.MsTe/blob/master/RepetitionQuestions.rst
 
 
-C# Grundlagen
-=============
+1 C# Grundlagen
+===============
 
 **1.0.1 CLR**
 
@@ -265,3 +265,292 @@ Delegates sind Methoden, die als Parameter übergeben werden. Delegates müssen 
 Multicast Delegate
 	Delegates können auf mehrere Methoden verweisen. Weitere Methoden werden einem Delegate mit += zugewiesen. Beim Aufruf des Delegates werden alle Methoden aufgerufen.
 
+
+**1.0.28 Delegates als Callback**
+
+.. code-block:: c#
+
+	class Messagebox {
+		bool state = false;
+		
+		public Messagebox() {
+			Networkconnection n = new Networkconnection();
+			n.connect(setOnline);
+		}
+		
+		private void setOnline() {
+			this.state = true;
+		}
+	}
+	
+	class Networkconnection {
+		delegate void onconnect();
+		
+		public void connect(onconnect f) {
+			// connect  ...
+			f();
+		}
+	}
+	
+	
+**1.0.29 Events**
+
+Events vereinfachen das Prinzip des Observers und basieren auf Delegates.
+
+.. code-block:: c#
+
+	public delegate void TimeChanged(int time);
+	
+	class Timeserver {
+		private int time = 0;	
+		public event TimeChanged onTimeChange;
+		
+		private void riseTime() {
+			time++;
+			if(onTimeChange != null) {
+				onTimeChange(this.time)
+			};
+		}
+	}
+	
+	class Clock {
+		Timeserver ts;
+		int time = 0;
+		
+		private void paint() {
+			// ...
+		}
+	
+		public Clock() {
+			this.ts = new Timeserver();
+			ts.onTimeChange += function(int time) { 
+				this.time = time;
+				this.paint();
+			}
+		}
+	}
+	
+	
+**1.0.30 Events statt Interfaces**
+
+Die Struktur bleibt flexibel. Events und Delegates können ohne Probleme später eingebaut werden. Interfacekonstrukte hingegen erzwingen eine Anpassung der Klassen.
+
+
+**1.0.31 Events simplified**
+
+.. code-block:: c#
+
+	delegate bool Check<T>(T value);
+	
+	public void Finish(List l,Check<List> c) {
+		if(c(l)) {
+			// do something
+		} else {
+			// do something other
+		}
+	}
+	
+	public bool CheckList(List l) {
+		return l.Length > 0;
+	}
+	
+	// method call
+	Finish(["a","b"], new Check<List>(CheckList));
+	
+	
+new Check<List>(CheckList) ist eine Kurzschreibweise für 
+
+.. code-block:: c#
+
+	Check<List> c = new Check<List>();
+	c = CheckList;
+	Finish(["a","b"], c);
+	
+	
+Alternative Schreibweise wäre wie in einem vorherigen Beispiel die Schreibweise mit delegate.
+
+.. code-block:: c#
+
+	delegate bool Check<T>(T value);
+	
+	public void Finish(List l,Check<List> c) {
+		if(c(l)) {
+			// do something
+		} else {
+			// do something other
+		}
+	}
+	
+	// method call
+	Finish(["a","b"], delegate(List l) {
+		return l.Length > 0;
+	});
+
+
+**1.0.32 Anonyme Methoden**
+
+Methoden ohne Namen, die einmahlig benutzt werden und darum dort definiert werden, wo sie auch aufgerufen werden.
+
+.. code-block:: c#
+
+	ts.onTimeChange += function(int time) { 
+		this.time = time;
+		this.paint();
+	}
+	
+	
+**1.0.33 Delegates & Exceptions**
+
+When you invoke a delegate, it will call each of the methods in its invocation list, one at a time.  If an exception is thrown from within one of those methods, the delegate will stop invoking methods in its invocation list and throw an exception up to the caller that initiated the invocation.  Methods on the invocation list that haven’t already been called will not get called.
+
+http://csharp.2000things.com/2011/07/27/376-what-happens-when-an-exception-occurs-during-delegate-invocation/
+
+
+
+2 Generics
+==========
+
+2.1 Generische Klassen
+----------------------
+
+**2.1.1 Syntax**
+
+Platzhalter für generische Klassen werden in Spitzige Klammern geschrieben.
+
+.. code-block:: c#
+
+	class BagElement<K,V> {
+		public V FindByKey(K key) {
+			// return ...
+		}
+		public List<K> GetKeys() {
+			// return ....
+		}
+	}
+	
+	
+**2.1.2 Generics Compiling**
+
+Der Compiler generiert für jeden Werttyp eine konkrete Klasse und für Referenztypen eine konkrete Object-Klasse.
+In Java werden Generics über Casts gelöst zur Runtime. Deshalb können in Java nur Elemente die von Object erben für Generics verwendet werden.
+
+
+**2.1.3 Constraints**
+	
+Constraints grenzen Generische Typen ein. Für Constraints können auch Platzhaltereigenschaften genutzt werden.
+
+.. code-block:: c#
+
+	class SortedBag<T> where T: IComparable {
+	
+	}
+	
+	// T and U must have the same type
+	class Pair<T,U> where U: T {
+	
+	}
+	
+	
+**2.1.4 Generics & Inheritance**
+
+* normalen Klassen, A<T>: B
+* konkreter generischer Klasse, A<T>:B<int>
+* generischer Klasse gleichen Types, A<T>: B<T>
+
+
+**2.1.5 Generics & Zuweisungen**
+
+Nur erlaubt, wenn Platzhalter korrespondieren.
+
+.. code-block:: c#
+
+	A a = new B<int>();
+	A a = new B<int, float>();
+	C<int> a = new B<int>();
+	C<int> a = new B<int, float>();
+	
+	
+**2.1.6 Generics, Override, Inheritance**
+
+Um von einer Platzhalterklasse zu erben, muss die Klasse selbst auch einen Platzhalter besitzen.
+
+.. code-block:: c#
+
+	class B<T> { 
+		public virtual T DoSomething() {} 
+	}
+	
+	class A:B<int> {
+		public override int DoSomething() {}
+	}
+	class A<T>:b<T> {
+		public override T DoSomething() {}
+	}
+	
+	// nicht erlaubt, da T innerhalb der Klasse unbekannt:
+	// class A:B<T> {
+	// 	public override T DoSomething() {}
+	// }
+	
+	
+**2.1.7 default(T)**
+	
+Defaut(T) gibt den Default Wert von T zurück (null für Referenztypen, 0 für Werttypen);
+
+
+**2.1.8 Nullable**
+
+Nullable ist ein Wrapper, um Valuetypes null werden lassen können. Die Kurzschreibweise lautet mit einem Fragezeichen.
+
+.. code-block:: c#
+
+	Nullable<int> i = 123;
+	int? i = 123;
+	
+	
+2.2 Generische Methoden, Delegates, Lambdas
+-------------------------------------------
+
+**2.2.1 Generische Methoden**
+
+.. code-block:: c#
+
+	public T GetElement(List<T> l,int key) {
+		// ...
+	}
+	
+	GetElement<double>([2.4, 3,6], 1);
+	
+
+**2.2.3 generische Delegates**
+
+.. code-block:: c#
+
+	delegate bool Check<T>(T value);
+	
+	
+	Finish([2,3], delegate(int val) { // ... });
+	
+	
+**2.2.4 Lambdas**
+
+Verkürzen Anonyme Methoden.
+
+.. code-block:: c#
+
+	Finish([2,3], val => val > 0);
+	Finish([2,3], (int val) => val > 0);
+	Finish([2,3], (int val) => { val > 0 });
+	
+	
+**2.2.5 Func, Action**
+
+Func und Action sind schon vordefinierte generische Delegates. Funcs geben einen Rückgabewert, Actions nicht.
+
+.. code-block:: c#
+
+	Func<int,int, int> CalcSum = (a, b) => return a*b;
+	
+	Action<string> print = s => Console.WriteLine(s);
+	
+	
