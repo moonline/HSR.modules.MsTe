@@ -293,7 +293,7 @@ Was sind "Navigation Properties" und was macht das Framework im Hintergrund für
 Wie funktionieren Lazy und Eager Loading? Wie wir die Ladetiefe definiert? Machen Sie ein Beispiel.
 
 **4.0.11.**
-Was passiert im Hintergrund bei implizitem Landen (Nachladen von Lazy Loading Properties/Relations)?
+Was passiert im Hintergrund bei implizitem Laden (Nachladen von Lazy Loading Properties/Relations)?
 
 
 CUD Operationen

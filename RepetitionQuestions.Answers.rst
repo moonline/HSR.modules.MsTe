@@ -554,3 +554,337 @@ Func und Action sind schon vordefinierte generische Delegates. Funcs geben einen
 	Action<string> print = s => Console.WriteLine(s);
 	
 	
+
+3 Linq
+======
+
+**3.0.1 Linq**
+
+Eine "Language Integrated Query" ist eine Abfrage über ein Datenset innerhalb der Sprache. Z.B. eine Such- und Filterabfrage über Elemente einer Liste.
+
+Linq to Objects
+	Linq Abfragen über IEnumerate Objekte
+Linq to XML
+	Linq Anfragen über XML
+Ling to SQL
+	Linq Abfragen über SQL Datenbanken
+	
+Als Benutzer macht es keinen Unterschied, um was für eine Quelle es sich handelt. Der Linq Treiber setzt dies im Hintergrund um.
+
+
+3.1 Extension Methods
+---------------------
+
+**3.1.1 Extension Methods**
+
+Erweitern von existierenden Klassen (reines Compilerfeature). Die erweiterugsmethode muss in einer statischen Klasse als statisceh methode mit this myClass definiert werden.
+
+.. code-block:: c#
+
+	static class Extensions {
+		public static int Count (this MyList, bool c) {
+			// count elements, if c is true, don't count null elements
+			return count;
+		}
+	}
+
+	static void Main() {
+		MyList p = new MyList();
+		// add elements
+		Console.WriteLine(p.Count(true));
+	}
+	
+	
+**3.1.2 EM Vertiefung**
+
+Der Compiler setzt Extensionmethods zur Compilezeit um. p.Count(true); wird zu Extensions.Count(p, true);
+
+
+**3.1.3 EM Bedingungen**
+
+* Die Klasse muss statisch sein.
+* Methode muss statisch sein.
+* Erster Methodenparameter muss "This MyClass" sein.
+
+Beispiel siehe 3.1.1
+
+
+**3.1.4 Vordefinierte Extension Methods**
+
+Sie sind generisch für Interfaces definiert und auf jeder Klasse, die das interface implementiert kann die methode aufgerufen werden.
+
+
+3.2 Anonyme Typen
+-----------------
+
+**3.2.1 Compile Time Inference**
+
+Auflösen von Typen zur Compilezeit.
+
+.. code-block:: c#
+
+	// aus
+	var person = { Name = "Anton", Age = 27 };
+	
+	// macht der Compiler
+	class ? {
+		public string Name { get };
+		public int Age { get };
+	}
+	? person = new ? ("Anton", 27);
+	
+	
+Anonyme Typen sind Typesafe, Der Compiler löst den Typ anhand des übergebenene Parameters auf.
+
+
+**3.2.2 Anonyme Typen**
+
+Anonyme Typen müssen mit var definiert werden, da der Compile den Typ selbst auflöst. Anonyme Objekte können wiederum Elemente von Anonymen Typen enthalten.
+
+.. code-block:: c#
+
+	var human = { callname = person.Name, Category = "modernHuman" };
+	
+	
+Anonyme Typen enthalten Nur Getter.
+
+
+**3.2.3 Typensicherheit bei Anonymen Typen**
+
+Die Typen werden aus den übergebenen Parametern hergeleitet.
+
+
+**2.3.4 Scope von Anonymen Typen**
+
+Anonyme Objekte können den Scope der aktuellen Methode nicht verlassen, da sie an lokale Variablen gebunden sind.
+
+
+**3.2.5 Operationen auf Anonymen Typen**
+
+Anonyme Typen sind readonly.
+
+
+3.3 Query Expressions
+---------------------
+
+**3.3.1 Query Expressions**
+
+Query expressions sind eine SQL ähnliche Syntax für Linq Queries. Die Queries könnten auch mit verketteten Methoden geschrieben werden. Der Compiler baut Query Expressions ebenfalls um zu verketteten Methodenaufrufen.
+
+
+**3.3.2 Query Expression -> Method calls**
+
+.. code-block:: c#
+
+	var result = customers.
+		Where(c => c.City == "Vienna").
+		OrderBy(c => c.Name).
+		Select(c => new { c.Name, c.Phone });
+
+
+**3.3.3 Method Calls -> QE**
+
+.. code-block:: c#
+
+	var result = from c in cars
+		where c.Type.startsWith("L")
+		orderby c.Name
+		select c.Type.ToUpper();
+		
+		
+**3.3.4 Range Variables**
+
+Range Variables sind die temporären Variablen, die einen einzelnen Datensatz repräsentieren.
+
+.. code-block:: c#
+
+	//                   .-- Range variable
+	//                   v
+	var customers = from c in customers select c.Name;
+
+
+**3.3.5 Grouping**
+
+Erlaubt das Gruppieren von Datensätzen.
+
+.. code-block:: c#
+
+	// Zählen der Städte nach Grösse in Millionen
+	var cities = from c in cities 
+		groupby c.PopulationInMillions() into s
+		select new { population = s.Key, cities = s.Count }; 
+		
+		
+**3.3.6 Select Many**
+
+Erlaubt das Zerlegen von Datensätzen.
+
+.. code-block:: c#
+
+	string[] nums = { "2,3,6", "5,8,0", "87,6,2" };
+	var numbers = from n in nums.selectmany(t => t.split(','))
+		select Convert.ToInt32(n)
+		
+		
+**3.3.7 let**
+
+Einführen zusätzlicher variablen, die auch in Operationen verwendet werden kann.
+
+.. code-block:: c#
+
+	var result = from c in cars
+		let len = c.Name.Length
+		where c.Type.startsWith("L") && len > 2
+		orderby c.Name
+		select c.Type.ToUpper();
+		
+		
+
+4 Entity Framework
+==================
+
+**4.0.1 EF**
+
+Das EF ist ein generisches Framework, das Zugriff auf Entities, z.B. Datenbanken ermöglicht. Die Datenbanken sind über typenspezifiche Data Providers angebunden.
+
+
+**4.0.2 EF Begriffe**
+
+Entity data Model
+	Bezeichnet die ganze Einheit aus logischem Model, Mapping und Konzeptuellem
+	::
+	
+		.------------------------ Entity Data Model ------------------.
+		| .--------------.       .             .     .--------------. |
+		| |              |     .´'-------------'`.   |              | |
+		| | conceptual m.|    {      Mapping      }  | storage mod. | |
+		| |              |     `.,-------------,.´   |              | |
+		| '--------------'       '             '     '--------------' |
+		'-------------------------------------------------------------'
+		
+		
+Logical Model
+	Definiert die Relationalen Daten mit ihren Beziehungen
+Conceptual Model
+	.Net Klassen, die ein Datenmodel bilden
+Mapping Layer
+	Verbindet die .Net Klassen des konzeptionellen Models mit den Datenbanktabellen
+
+
+**4.0.3 Mapping Layer**
+
+Definiert, welche Properties des konzeptuellen Modells wie auf welche Entities gemappt werden.
+
+
+**4.0.4 Strategien**
+
+DB First
+	Visual Studio generiert aus einer bestehenden Datenbank das Konzeptuelle Modell und das Mapping, erst anschliessend wird der Applikationscode geschrieben
+	::
+	
+		DB -> EDM -> Code
+Model First
+	Als erstes wird das Konzeptuelle Modell erstellt, aus dem die .Net Klassen, das Mapping und die DB generiert werden.
+	::
+		
+		DB <- EDM -> Code 
+Code First
+	Als erstes wird der Applikationscode geschrieben. Daraus werden die benötigten Konzeptuellen Klassen extrahiert, Das konzeptuelle Model, das Mapping und die DB generiert
+	::
+		
+		Code -> EDm -> DB
+		
+		
+**4.0.5 Inheritance Strategies**
+
+Table per Hierarchy
+	Abgeleitete Klassen werden in die gleiche Tabelle gespeichert, diese wird um zusätzliche Felder erweitert -> viele leere Felder  in DB
+Table per Type
+	Für jede abgeleitete Klasse eine eigene Tabelle mit den zusätzlichen Feldern -> Abgeleitete Objekte werden über mehrere Tabellen verstreut, für simple Abfragen schon Join nötig
+Table per concrete Type
+	Gleich wie TpT, jede Tabelle enthält jedoch alle Information einer Klasse. Objekte werden nicht über mehrere Tabellen verstreut -> schwieriger zu warten
+	
+	
+**4.0.6 Entity Splitting**
+
+Entities sind über mehrere Tabellen verstreut
+
+
+**4.0.7 DB Context**
+
+Repräsentiert die aktuell geöffnete DB. Wird normalerweise mit using angelegt, sodass er automatisczh geschlossen wird.
+
+DBContext bietet Zugriff auf DBsets und settings.
+
+
+**4.0.8 Ling & EF**
+
+Mit Linq können Abfragen über die vom Context gelieferten DBsets gemacht werden. Linq arbeitet im Hintergrund automatisch mit LinqToEntities.
+
+
+**4.0.9 navigation Properties**
+
+Sind Beziehungen im concept. Model (Eigenschaften, die benutzt werden um sich durch die Objektstruktur zu hangeln). Das EF macht im Hintergrund jeweils where
+
+.. code-block:: c#
+
+	from o in Order
+	// Orderdetails.unitPrice > 20 ist eine Navigationproperty
+	where o.OrderDetails.unitPrice > 20
+	select o;
+
+		
+Das EF macht im Hintergrund Joins, um die verknüpften Daten einbeziehen zu können.
+
+
+**4.0.10 Lazy/Eager loading**
+
+.. code-block:: c#
+
+	context.configuration.LazyLoadingEnabled = true;
+	
+	
+Eagerloading Tiefe: in Linq mit Include() eingebundene Datensätze oder "context.Entry(cust).Collection(c => c.Orders).Load();" geladene Datensätze.
+
+
+**4.0.11 implizites Nachladen**
+
+Das EF setzt jedes Mal eine Query ab um die entsprechenden Daten zu laden sobald diese gebraucht werden.
+
+
+4.1 CUD Operations
+------------------
+
+**4.1.1 CUD Beispiele**
+
+.. code-block:: c#
+
+	// create
+	context.customers.Add(c);
+	context.SaveChanges();
+	
+	// update
+	var customer1 = (from c in customers where c.name = "Hanna" select c).FirstOrDefault();
+	if(customer1 != null) {
+		customer1.name = "Hannah";
+		context.SaveChanges();
+	}
+	// Wird beim Updaten mit dem originalen und neuen Wert gearbeitet, so muss das Original mit 
+	// context.customers.attach(original) attached werden, mit 
+	// context.Entry(original) Currentvalues.SetValues(modified); und 
+	// context.SaveChanges(); aktualisiert werden.
+		
+	// delete
+	context.customers.DeleteObject(customer1);
+	context.SaveChanges();
+
+
+**4.1.2 Kollisionsüberwachung**
+
+Weil laden und Speichern in zwei unterschiedlichen Transaktionen stattfinden und sich das Objekt in der zwischenzeit geändert haben kann.
+
+
+
+
+
+
