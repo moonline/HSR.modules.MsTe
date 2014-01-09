@@ -885,6 +885,292 @@ Weil laden und Speichern in zwei unterschiedlichen Transaktionen stattfinden und
 
 
 
+5 WCF
+=====
+
+**5.0.1 WCF**
+
+Windows Communication Foundation. Ersetzt ASMX, COM+, MSMQ, .Net Remoting
+
+
+**5.0.2 Vorteile WCF**
+
+* Gute Integration
+* Sehr Generisch, funktioniert mit vielen Technologien
+* Service Orientiert
+
+
+**5.0.3 Interoperabilität**
+
+Grundsätzlich ist über SOAP Kommunikation mit beliebigen Endpunkten möglich. Die Zusammenarbeit mit gleicher Technologie ist jedoch wesentlich einfacher.
+
+
+5.1 Konzepte, Architektur
+-------------------------
+
+**5.1.1 Standartprotokoll**
+
+SOAP
+
+
+**5.1.2 Cross-Domain Call**
+
+::
+
+	Machine A ---------.
+	| Process 1 ------. |
+	| | Service--.    | |
+	| | |        +-O  | | Domain X
+	| | '--------' ^  | |
+	| '------------|--' |
+	'--------------|----'
+	               |
+	            Internet
+	               |
+	              /	
+	Machine B ---/---------------.
+	| Process 2 /--------------. |
+	| | Proxy--:    .-Client-. | |
+	| | |      +-O<-|        | | | Domain Y
+	| | '------'    '--------' | |
+	| '------------------------' |
+	'----------------------------'
+
+	
+**5.1.3 Endpoints**
+
+Knoten, zwischen denen die Kommunikation läuft. Ein Service kann auch mehrere Endpoints besitzen.
+
+
+**5.1.4 Endpoint Properties**
+
+Endpunkte besitzen jeweils:
+
+* A: Adresse (URL, URI)
+* B: Bindung (Kanal)
+* C: Contract (Interface Def., DTO)
+
+
+**5.1.5 WSDL**
+
+Web Service Description Language
+
+* Definiert einen Webservice
+* Serviceclients können anhand der Schnittstelle generiert werden.
+
+**5.1.6 WSDL Document**
+
+Metadata Exchange MEX bietet genügend Metadaten zur automatischen Generierung eines Clients.
+
+
+**5.1.7 Contracts**
+
+Service Contract
+	* Definiert den Service und deren Operations, Verhalten und Interaktionsmodel
+	* Definiert mit [ServiceContract(Namespace = "url")], [OperationContract] Annotation
+Data Contract
+	* Definiert Datenstrukturen und Versionierung
+	* [DataContract], [DataMember]
+Message Contract
+	* Struktur der Message (Header / Body)
+
+
+**5.1.8 Annotations**
+
+Siehe 5.1.7
+
+
+**5.1.9 DTO's**
+
+Data Transfer Objects. Objekte ohne Methoden, die nur benutzt werden um die Daten über den Service zu übertragen.
+
+
+5.2 Hosting
+-----------
+
+**5.2.1 Hosting**
+
+* Visual Studio Autohost
+* Manuell via ServiceHost Klasse
+* MS Information Server (Beste Möglichkeit für Live Betrieb)
+
+
+**5.2.2 App.Config**
+
+* Konfiguriert die App
+* Config könnte auch Programmatisch im Code gemacht werden
+* Wird die App als Bundle ausgeliefert, so ist die App.Config ausserhalb -> Administrator kann App konfigurieren ohne neukompilation
+
+
+5.3 Client
+----------
+
+**5.3.1 Client Generierung**
+
+* Generierung anhand des WSDL Schemas
+* Verlust von Typeninformationen
+
+
+**5.3.2 Shared Assembly**
+
+Der Client wird nicht über die WSDL Schnittstelle generiert und aktualisiert sondern über ein Shared Assembly.
+
+* Vorteile: Kein Verlust von Typeninfo, schnell zum Entwickeln
+* Nachteil: Assembly muss für Client wie Service verfügbar sein -> Deployment auf Server & Client
+
+
+**5.3.3 Shared Assembly Content**
+
+* Service Contracts / Interfaces
+* Data Contracts
+* Other Shared Info
+
+
+5.4 Communcation Patterns
+-------------------------
+
+**5.4.1 Patterns**
+
+One Way
+	Fire and forget Prinzip. Es werden nur Requests abgesetzt aber keine empfangen. (asynchron)
+Request Reply
+	Ein Requst wird abgesetzt, anschliessend erfolg eine Antwort. (synchron)
+Dupley
+	In beide Richtungen wird parallel kommuniziert. (asynchron)
+	
+	
+**5.4.2 Pattern Annotations**
+
+OneWay
+	.. code-block:: c#
+	
+		[ServciceContract]
+		public Interface IS {
+		
+			[OperationContract(IsOneWay=true)]
+			void StoreProblem(ComplexProblem p);
+			
+		}
+		
+		
+Callback
+	.. code-block:: c#
+	
+		[OperationContract(CallbackContract=typeof(ICalcResults)]
+		public interface IS {
+			
+		}
+		
+		public interface ICalcResults {
+			[OperationContract(IsOneWay=true)]
+			void Results(CompleyProblem p, double result);
+		}
+		
+	Service:
+	.. code-block:: c#
+	
+		public class CalcService : ICalculator {
+			public void SolveProblem(ComplexProblem p) {
+				// ...
+				// call client back
+				Callback.Results(p, res);
+			}
+			
+			ICalculatorDupleyCallback Callback {
+				get {
+					return OperationContext.Current.GetCallbackChannel<ICalcResulsts>();
+				}
+			}
+		}
+		
+		
+**5.4.3 FaultContract**
+
+Dient zum Remote Exceptions werfen.
+
+.. code-block:: c#
+
+	// MathFault class is used to send additional information
+	[FaultContract(typeof(MathFault))]
+	int Divide(int n1, int n2);
+	
+.. code-block:: c#
+
+	// additional information in mathFault
+	throw new FaultException<MathFault>(
+		new MathFault() { Operation = "division", ProblemType = "divide by cero" };
+	);
+	
+	
+**5.4.4 FaultContract vs Exception**
+
+Die Exception muss im Contract definiert sein, damit der Client damit überhaupt etwas anfangen kann. -> daher FaultContract
+
+
+**5.4.5 Exceptionfluss**
+
+Server
+	1) Klasse im Model wirft Exception
+	2) Service fängt Exception ab
+	3) Service wirf FaultException, die an den Client übertragen wird
+
+Client
+	4) Client fängt FaultException
+	5) Client behandelt FaultException
+	
+	
+5.5 Tech. Details
+-----------------
+
+**5.5.1 Adresse**
+
+Besteht aus:
+* Protocol
+* Host
+* Port / Pipe / Queue
+* Rel. Pfad
+
+[transport]://[domain][:port][path]
+
+
+**5.5.2 Binding**
+
+Client und Server müssen immer das gleiche Binding besitzen. Sonst kommt die Kommunikation nicht an.
+
+
+**5.5.3 DataContract & Inheritance**
+
+* Service erkennt abgeleitete Klassen nicht
+* Annotation 
+	.. code-block:: c#
+	
+		[DataContract]
+		[KnownType(typeof(AbgeleiteteKlasse1)]
+		public class Klasse {}
+
+		[DataContract]
+		public class AbgeleiteteKlasse1 : Klasse {}
+		
+		
+**5.5.4 Redundanz beim Übertragen**
+
+.. code-block:: c#
+
+	public class a {		
+		public Klass b = new Klass();
+
+		[DataMamber(IsReference=true)]
+		public Klass c = b;
+	}
+	
+	
+IsReference=true verhindert das Kopieren und somit übermitteln redundanter Objekte.
+
+
+**5.5.5 Fehlertoleranz**
+
+* Version Toleranz: Neue Members werden automatisch Unterstützt (ignoriert)
+* Entfernte Memebers ebenfalls: Default Werte sind default(T)
 
 
 
