@@ -492,7 +492,7 @@ Data Binding
 Was ist Data Binding?
 
 **6.4.2.**
-Was sind Binding Target und Target und was sind OneWay, OneWayToSource und Twoway Binding?
+Was sind Binding Target und Source und was sind OneWay, OneWayToSource und Twoway Binding?
 
 **6.4.3.**
 Welche Mechanismen muss eine Klasse im Model umsetzen, damit UI Binding möglich ist?
@@ -549,6 +549,7 @@ Wie spielen Binding und Notification beim MVVM zusammen?
 Validation
 ----------
 **6.6.1.**
+Wie wird Validation umgesetzt?
 
 
 Async

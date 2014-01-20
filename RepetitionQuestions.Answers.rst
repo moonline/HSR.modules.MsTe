@@ -1174,3 +1174,648 @@ IsReference=true verhindert das Kopieren und somit übermitteln redundanter Obje
 
 
 
+6 WPF
+=====
+
+**6.0.1 WPF**
+
+WPF ist das neuste UI Framework für .Net. Es wird sowohl im C# wie für Metro verwendet.
+
+
+**6.0.2 MilCore**
+
+Der MilCore ist eine zusätzlich eingeführte Schicht zwischen der CLR und DirectX. Damit ist HW Acceleration, Video/Audio Play, etc. im .Net einfach möglich.
+
+
+6.1 XAML
+--------
+
+**6.1.1 XAML**
+
+XAML ist eine deskriptive UI Sprache, die einen Baum mit UI Elementen definiert. Aus diesem Baum werden im Hintergrund UI Klassen generiert, die bei der Ausführung das UI aufbauen.
+
+
+**6.1.2 Namespaces**
+
+* Default Namespace enthält alle WPF Komponenten
+* xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" sollte für den XAML Namespace verwendet werden
+* Eigene Namespaces werden z.B. mit xmlns:s="clr-namespace:Me.ProjectX" definiert und müssen mit "using s = Me.ProjectX" übereinstimmen (Projekt muss so existieren und heissen).
+
+
+**6.1.3 Properties Attribute Syntax**
+
+.. code-block:: xml
+
+	<Rectange Fill="Red" />
+	<Rectange>
+		<Rectangle.Fill>
+			<Color R="255" G="2552 B="255" />
+		</Rectangle.Fill>
+	</Rectange>
+	
+	
+**6.1.4 Type Converters**
+
+Type Converters konvertieren zwischen Daten und visueller Darstellung. Z.B. Datum (Unix Timestamp -> Gregorian Date).
+
+* Beispiel
+
+	.. code-block:: xml
+	
+		<Button.Background>White</Button.Background> 
+		
+	
+	wird konvertiert nach 
+	
+	.. code-block:: c#
+	
+		button1.Background = System.Windows.Media.Brushes.White;
+	
+	
+**6.1.5 Property Binding**
+
+.. code-block:: xml
+
+	
+.. code-block:: c#
+
+
+**6.1.6 Event Handler**
+
+Events wie Click, etc. werden als Properties auf Elemente gesetzt und erhalten als Eigenschaft den Namen der Methode des Code-behind File, die aufgerufen werden soll.
+
+.. code-block:: xml
+
+	<Button Click="killButton />
+	
+.. code-block:: c#
+
+	// Code behinf file
+	private void killButton(Object sender, RoutedEventArguments e) {
+		// ...
+	}
+
+
+**6.1.7 logical Tree & Visual Tree**
+
+Logical Tree
+	Enthält die Struktur der Elemente als Baum (Button, Window, Panel).
+Visual Tree
+	Enthält die sichtbaren Elemente (von visual abgeleitet) wie Button, Window, Panel, Border, Decorator, ContentPresenter, ...
+	
+Styles verändern die Struktur des Visual Trees nicht, sondern setzen nur Properties. Mit Templates können jedoch ganze Teile des Visual Trees ausgetauscht werden.
+
+
+**6.1.8 Attribute Syntax**
+
+Statt Attribute als Elemente zu definieren, können sie auch inline geschrieben werden:
+
+.. code-block:: xml
+
+
+	<!-- Property Element Syntax -->
+	<TextBox>
+		<TextBox.Text>
+			<Binding Path="Name" />
+		</TextBox.Text>
+	</TextBox>
+
+	<!-- Attribute Syntax -->
+	<TextBox Text="{Binding Path=Name}" />
+	
+	
+**6.1.9 WPF Core Klassen**
+
+* Alle Objekte erben von DependencyObjekt. Dieses erlaubt dependency properties.
+* Elemente mit visueller Repräsentation erben von visual
+
+::
+
+	               [ Object ]
+	                    |
+	                    :
+	                    |
+	          [ DependencyObject ]
+	          .---------+----------.
+	          |         |          |
+	       [ ... ] [ Visual ]   [ ... ]
+	                    |
+	              [ UIEleent ]
+	                    :
+
+
+**6.1.10 Templates**
+
+* Erlauben das bauen von eigenen Elementen.
+* Erlauben den Visual Tree eines Elementes auszutauschen.
+* TargetType="{x:Type Button} definiert, wessen Element das Erscheinungsbild durch das Template verändert werden soll.
+
+.. code-block:: xml
+
+	<!-- Definition -->
+	<ControlTemplate x:Key="SmileyButton" TargetType="{x:Type Button}">
+		<Canvas>
+			<Ellipse Fill="Yellow" Stroke="Black" StrokeThickness="7" Width="100" Height="100" />
+			<Ellipse Fill="Black" Width="10" Height="15" Canvas.Left="28" Canvas.Top="28" />
+			<Ellipse Fill="Black" Width="10" Height="15" Canvas.Left="62" Canvas.Top="28" />
+			<Path Stroke="Black" x:Name="Mouth" StrokeThickness="6" Data="M 30,60 Q 50,90 70,60" />
+		</Canvas>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsPressed" Value="true" >
+				<Setter Property="Data" Value="M 30,60 Q 20,90 70,60" TargetName="Mouth"></Setter>
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+	
+	<!-- Verwendung. Der Button kann wie gewohnt unverändert genutzt werden -->
+	<Button Content="Click me" />
+	
+	
+6.2 Properties
+--------------
+
+**6.2.1 Properties**
+
+Z.B: "Fill" eines Rechtecks.
+
+
+**6.2.2 Dependency Properties**
+
+* Dependency Properties erben den Value vom Parent. So erben Elemente Properties automatisch, wenn sie nicht überschreben wurden.
+	
+
+**6.2.3 Dependecy Property Auflösung**
+
+* 1 Animation Properties
+* 2 Binding Expression
+* 3 Local Value
+* ..
+* 9 Inherited Value
+* 10 Default Value
+
+
+**6.2.4 Property Change Notification**
+
+* Das Data Binding registriert sich für "Property Change Notifications" und wird somit benachrichtigt, falls sich das Property ändert.
+* Dazu muss der Entwickler die Notification implementieren
+
+.. code-block:: c#
+
+	class Car : INotifyPropertyChanged {
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		
+		private Person owner;
+		
+		public Owner {
+			set { 
+				if(value != null) { 
+					this.owner = value;
+					if(PropertyChanged != null) {
+						PropertyChanged(this, new PropertyChangedEventArgs('owner'));
+					}
+				} 
+			};
+			get { return this.owner; }
+		}
+	}
+
+	
+**6.2.5 Attached Property**
+
+Elemente wie Stackpanel besitzen zwar selbst keine DependencyProperties, können jedoch für die Vererbung von Dependency Properties genutzt werden. Dazu wird das Propertie einem andern Element mit einem Verweis auf das Stackpanel gesetzt.
+
+.. code-block:: xml
+
+	<DockPanel>
+		<CheckBox DockPanel.Dock="Top">Hello</CheckBox>
+	</DockPanel>
+
+	
+Diese Properties werden dem Element im Code "attached".
+
+
+6.3 Routed Events
+-----------------
+
+**6.3.1 Routed Events**
+
+Routed Events werden durch die UI Struktur geroutet. Die Art des Routing hängt vom Typ ab.
+
+
+**6.3.2 Routing Stretegien**
+
+Bubbling
+	Events werden auf dem Source Element ausgelöst und bubbeln hoch bis zur Root.
+Tunneling
+	Events werden auf dem Root Element ausgelöst und tunneln runter bis zur Source.
+Direct
+	Events werden nur auf dem Source Element ausgelöst.
+	
+	
+**6.3.3 Begriffe zu RE**
+
+Sender
+	Element, dem der Eventhandler attached wurde (z.B. Stackpanel)
+Source
+	Element, das den Event geworfen hat (element unter mouse, keyboard focus element, ...). (z.B. Button im Stackpanel)
+OriginalSource
+	Meisstens das gleiche Element wie die Source. Ist die Source jedoch ein zusammengesetztes Element, so ist die OriginalSource das Element, das effektiv den Event ausgelöst hat. (z.B. Linie des Buttons)
+RoutedEvent
+	Ein traversierender Event, der Source, OriginalSource, ... beinhaltet.
+Handled
+	Wird auf eine Event "e.Handled = true" gesetzt, so wird er nicht mehr weitergereicht.
+	
+	
+**6.3.4 RoutedEvent vs Event**
+
+Da RoutedEvents Bubbeln/Tunneln können müssen, unterscheiden Sie sich von normalen Events und sind eigene Konstrukte.
+
+
+**6.3.5 Bubbling**
+
+Events bubbeln die Hierarchie hoch, bis sind abgehandelt wurden.
+
+
+**6.3.6 EventHandling**
+
+Abfangen, Abarbeiten, Auf Handled setzen:
+
+.. code-block:: c#
+
+	private void ImageMouseLeftButtonDownHandler(object sender, RoutedEventArgs e) {
+		//...
+		e.Handled = true;
+	}
+
+	
+6.4 Data Binding
+----------------
+
+**6.4.1 Data Binding**
+
+Binden von Objekten und Properties an UI Elemente. Lösen Objekte einen INotifyPropertyChanged aus, so wird das UI automatisch aktualisiert.
+
+
+**6.4.2 Begriffe**
+
+Binding Target
+	Ein Beliebiges Dependency Property im UI.
+Binding Source
+	Ein beliebiges public Property eines Objektes.
+OneWay
+	Wenn sich das Objekt ändert, wird das UI angepasst.
+OneWayToSource
+	Wenn sich das Element im UI ändert, wird das Objekt angepasst.
+TwoWay
+	Beide Richtungen. Es wird lesend und schreibend auf das Objekt zugegriffen über das UI.
+	
+	
+**6.4.3 Binding Voraussetzungen**
+
+Das zu bindende Property muss public sein und eine INotifyPropertyChanged werfen, wenn sich dessen Wert verändert.
+
+
+**6.4.4 DataContext**
+
+DataContext definiert, woher die Daten kommen. Wird z.B. eine Student Klasse als DataContext gseetzt, so wird beim Binden von Properties automatisch diese Objekt verwendet.
+
+.. code-block:: xml
+
+	<Window.DataContext>
+		<local:ViewModel/>
+	</Window.DataContext>
+	
+
+**6.4.5 Value Converters**
+
+Konvertieren Values zwischen der internen Repräsentation und der UI Darstellung.
+
+.. code-block:: c#
+
+	public class NumberToColorConverter: IValueConverter {
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+			int num = int.Parse(value.ToString());
+			return (num > 50) ? Brushes.White : Brushes.Black;
+		}
+		
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+			// ...
+		}
+	}
+	
+	
+.. code-block:: xml
+
+	<window.Rescources>
+		<local:NumberToColorConverter x:Key="myConverter" />
+	</window.Rescources>
+	
+
+	<Label Background="{Binding Path="NumOfElements", Converter={StaticResource myConverter}} ... />
+
+	
+**6.4.6 Data Template**
+
+Data Templates definieren die Darstellung eines zusammengesetzten Objektes. Beispiel: Ein Forumseintrag der sich aus Autor, Autorenfoto, Beitrag, ... zusammensetzt. Das Data Template vereinfacht die mehrfache Verwendung eines solchen Elements.
+
+.. code-block:: xml
+
+	<DataTemplate x:Key="EntryTemplate">
+		<Image Source="{Binding Path="Author.Image" />
+		<!-- ... -->
+	</DataTemplate>
+	
+	
+	<StackPanel>
+		<ListBox ItemsSource="{Binding}" ItemsTemplate="{StaticResource EntryTemplate}" />
+	</StackPanel>
+	
+	
+**6.4.7 Collections**
+
+Für das Binding von Collections muss ein DataTemplate umgesetzt werden, das die Darstellung eines Item definiert.
+
+.. code-block:: xml
+
+	<ListBox ItemSource="{Binding}" ItemTemplate="{StaticResource carTemplate}" />
+	
+	
+**6.4.8 Master-Detail**
+
+Über IsSynchonizedWithCurrentIterm="True" wird definiert, das mehrere Selektoren auf die gleichen Daten pointen. Das CurrentItem wird als Property im Code Behind definiert.
+
+
+**6.4.9 IsSynchronizedWithCurrentItem**
+
+Definiert die Synchronisation mit dem aktuellen Item der Liste.
+
+
+**6.4.10 Observable Collections**
+
+Notifien automatisch das UI.
+
+
+6.5 WPF Patterns
+----------------
+
+**6.5.1 Command Pattern**
+
+* Üblicherweise kann die gleiche Funktion in einem UI von mehreren Stellen aus ausgelöst werden. Um nicht für jede Aktion einzeln einen Eventhandler zu schreiben wird ein Command verwendet, das von den Events aufgerufen wird.
+* Da auch jedes UI Element mit dem Event den Status des Objektes überprüfen muss, wird auch dies vom Command übernommen
+
+.. code-block:: c#
+
+public class PrintCommand : ICommand {
+	public void Exeute(object parameter) {
+		Page p = (Page) object;
+		p.Document.PrintPage(p.number);
+	}
+	
+	public bool CanExecute(object parameter) {
+		if(object != null) {
+			Page p = (Page) object;
+			if(PrintService.available && p.Document.PrintingAllowed) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public event EventHandler CanExecuteChanged {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        } 
+}
+
+
+**6.5.2 Routed Commands**
+
+* Implementation von ICommand
+* Ähnlich wie RoutedEvents
+
+
+**6.5.3 Delegate Commands**
+
+* Implementation von ICommand
+* Multiple Commands Handler
+
+
+**6.5.4 WPF Command Model**
+
+* Events werden an die zugehörigen Commands delegiert
+* Der Status (enable/disable) eines Controlls wird mit dem Status des zugehörigen Commands synchronisiert
+
+
+**6.5.5 MVP vs MVC**
+
+MVP View ist passiv und nutzt nur die Daten, die vom Controller übergeben werden. MVC greift direkt auf das Model zu in holt sich die benötigten Daten.
+
+
+**6.5.6 MVVM**
+
+* Werden in der View aggregierte Daten benötigt wie z.B. Berechnungen, Datenkorrelationen, ... so lässt sich dies nicht mehr direkt aus dem Model auslesen.
+* MVVM legt der View anstelle eines Controllers ein ViewModel zugrunde, das die Daten für die view aufbereitet.
+
+
+**6.5.7 ViewModel**
+
+* Aggregation der Daten aus dem Model
+* Commands für die View
+
+
+**6.5.8 MVVM & DataBinding**
+
+* Das ViewModel benachrichtigt die View über Changes.
+* Das ViewModel enthält Operationen und Stati.
+* Die View bindet auf das ViewModel.
+
+
+6.6 Validation
+--------------
+
+**6.6.1 Validation**
+
+* Die View kann automatisch Eingabedaten Validieren, anhand von Exceptions oder DataErrors, die über das Binding im Model geworfen werden.
+* Zusätzliche Informationen können über das IDataErrirInfo Interface zur Verfügung gestellt werden.
+
+
+
+7 Async
+=======
+
+**7.0.1 Begriffe**
+
+Concurrent
+	Verschiedene Aktivitäten finden zur gleichen Zeit statt
+Multithreaded
+	Mehrere gleichzeitig laufende ausführungsumgebungen
+Parallel
+	Simultan nebeneinander laufende Aktivitäten
+Asynchron
+	Aktivitäten, auf deren Resultat nicht gewartet werden muss
+	
+	
+7.1 Threads
+-----------
+
+**7.1 Thread Architektur**
+
+* Threads besitzen eigene Daten
+* Eine AppDomain besitzt mehrere Threads und Shared Data
+* Ein Windos Prozess besitzt mehrere AppDomains
+
+
+**7.1.1 Thread API**
+
+* CurrentThread gibt es nur einen, daher ist es eine Klassenmethode
+* Sleep wird automatisch für den laufenden Thread aufgerufen
+
+
+7.2 Tasks
+---------
+
+**7.2.1 Tasks**
+
+Leichtgewichtige Threads. Arbeiten Arbeitspakete ab.
+
+
+**7.2.2 Statement & Schleifenparallelisierung**
+
+Parallel.For(), Parallel.ForEach(), Parallel.Invoke()
+
+
+**7.2.3 PLINQ**
+
+* Parallel Implementation für LINQ. Wird gestartet mit "from car in cars.AsParallel() ..."
+* Der Programmierer muss sich nicht selbst um die Parallelisierung kümmern.
+
+
+**7.2.4 Work-Stealing**
+
+Sind in den Thread Pools von andern Threads noch Threads vorhanden, trotzdem aber ein Pool leer und ein Thread ungenutzt, so klaut dieser Arbeitspakete von einem andern Pool.
+
+
+**7.2.5 Tasks Usage**
+
+.. code-block:: c#
+
+	// run task
+	Task.Run(() => doSomething());
+	
+	// block until task complete
+	Task task = Task.Run(() => doSomethingOther());
+	task.Wait(); 
+	
+	// Future
+	Task<int> task = Task.Run(() => { var b = doSomething(); return b; });
+	int res = task.Result(); // blocks if not already finished
+
+	
+**7.2.6 Exceptions**
+
+* Aggregate Exceptions sind eine Zusammenfassung aller Exceptions, da ein Task mehrere Exceptions geworfen haben kann.
+* Property InnerExceptions beinhaltet die Exceptions.
+
+.. code-block:: c#
+
+	try {
+		task.Wait();
+	} catch(AggregateException e) {
+		
+	}
+	
+	
+**7.2.7 Continuations**
+
+* Task fertig -> mit anderer Aufgabe fortsetzen
+* task.GetAwaiter().OnComplete(() => doSomething());
+* task.ContinueWith(() => doSomething());
+* ContinueWith liefert Task zurück -> Taskchaining möglich.
+
+
+7.3 Async
+---------
+
+**7.3.1 Asynchroner Aufruf**
+
+.. code-block:: c#
+
+	delegate int CalcCallback(int result);
+
+	async Task<int> CalcScedule(CalcCallback c) {
+		// ...
+		return c(result);
+	}
+	
+	int result = await CalcScedule(x => return x);
+	
+	
+**7.3.2 Async Lambda**
+
+.. code-block:: c#
+
+	async Task<int> CalcOrdering = () => {
+		// ...
+		return result;
+	}
+	
+	int result = await CalcOrdering();
+	
+	
+7.4 WPF
+-------
+
+**7.4.1 Message Queue**
+
+Die UI Controlls sind local Values des andern Threads und darum nicht zugreifbar von einem andern Thread aus. Zudem wäre ein direkter Zugriff nicht Thread save.
+
+
+**7.4.2 Synchronisationcontext**
+
+Der SynchronisationContext eines Threads wird initialisiert, sobald das erste UI Controll hinzugefügt wird. Über den SynchronisationContext eines andern Threads kann ein Thread Code auf diesem ausführen lassen.
+
+* context.Post(...) übergibt eine Methode an den SC
+* context.Send(...) benutzt der Thread zum die Methode auszuführen
+
+
+**7.4.3 Thread Zuordnung**
+
+* Wird eine UI Komponente das Resultat einer Berechnung innerhalb einer ContinueWith-Funktion zugewiesen, so muss der uiContext mitgegeben werden, sonst weiss der Sceduler nicht, auf welchem Task das Control läuft.
+* OnComplete wird automatisch auf dem UI Context ausgeführt, sodass das Control bekannt ist.
+* Am einfachsten "var result = await Task.Run(Calculation);" und anschliessender Zuweisung des Resultates an das UI Element, da die Zuweisung dann automatisch auf dem richtigen UI Kontext stattfindet.
+
+
+**7.4.4 Task Cancelling**
+
+* Von einer CancellationTokenSource werden beliebig viele Tokens generiert. Diese Tokens werden an Tasks übergeben.
+* Sobald auf der CancelationSource .Cancel() aufgerufen wurde, liefert token.IsCancellationRequested() true zurück. Der Task kann daraufhin seine Arbeiten abschliessen und beenden.
+
+.. code-block:: c#
+
+	car cancelSource = new CancellationTokenSource();
+	token = CancellationTokenSource.Token;
+	
+	async Task<int> doSometing = token => { 
+		if(!token.IsCancellationRequested) {
+			// do next calc iteration
+		} else {
+			token.ThrowIfCancellationRequested();
+		}
+		return result;
+	}
+
+	try {
+		int result = await doSomething(token);
+	} catch (AggregatedException e) {
+		for(var ex in e.InnerExceptions) {
+			// ..
+		}
+	}	
+	
+	
+
+
+
+
+
